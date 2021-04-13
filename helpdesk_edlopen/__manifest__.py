@@ -10,6 +10,7 @@
         "base",
     ],
     "data": [
-        # "views/helpdesk_menu.xml",
+        "views/helpdesk_menu.xml",
+        "security/ir.model.access.csv",
     ],
 }
