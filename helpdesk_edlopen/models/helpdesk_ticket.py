@@ -42,3 +42,26 @@ class HelpdeskTicket(models.Model):
         string='Preventive Action',
         help='Descrive preventive actions to do.'
     )
+
+    def action_assigned(self):
+        self.ensure_one()
+        self.write({
+            'state': 'assigned',
+            'assigned': True
+        })
+
+    def action_in_process(self):
+        self.ensure_one()
+        self.state = 'in_process'
+
+    def action_pending(self):
+        self.ensure_one()
+        self.state = 'pending'
+
+    def action_solved(self):
+        self.ensure_one()
+        self.state = 'solved'
+
+    def action_canceled(self):
+        self.ensure_one()
+        self.state = 'canceled'
