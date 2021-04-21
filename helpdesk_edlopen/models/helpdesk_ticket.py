@@ -144,21 +144,23 @@ class HelpdeskTicket(models.Model):
             'tag_ids': [(0, 0, {'name': self.tag_name})]
         })
         # opción 2
-        tag =self.env['helpdesk.ticket.tag'].create({
+        tag = self.env['helpdesk.ticket.tag'].create({
             'name': self.tag_name
         })
         self.write({
             'tag_ids': [(4, tag.id, 0)]
         })
         # opción 3
-        tag =self.env['helpdesk.ticket.tag'].create({
+        tag = self.env['helpdesk.ticket.tag'].create({
             'name': self.tag_name
         })
         self.write({
             'tag_ids': [(6, 0, tag.ids)]
         })
         # opción 4
-        tag =self.env['helpdesk.ticket.tag'].create({
+        tag = self.env['helpdesk.ticket.tag'].create({
             'name': self.tag_name,
             'ticket_ids': [(6, 0, self.ids)]
         })
+        # finalmente limpiamos el contenido de tag_name
+        self.tag_name = False
