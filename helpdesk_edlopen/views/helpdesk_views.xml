@@ -24,13 +24,23 @@
                             <field name="date_limit" />
                         </group>
                         <group>
+                            <field name="user_id" />
                             <field name="assigned" />
+                            <field name="ticket_qty" />
                             <field name="dedicated_time" />
                         </group>
                     </group>
                     <notebook>
                         <page name="description" string="Description">
-                            <field name="description" />
+                            <group>
+                                <field name="description" nolabel="1"/>
+                                <field name="tag_name" />
+                                <button string="Create tag" name="create_tag" type="object" class="btn-primary" />
+                                <field name="tag_ids" nolabel="1"/>
+                            </group>
+                        </page>
+                        <page name="actions" string="Actions">
+                            <field name="action_ids" />
                         </page>
                         <page name="quality" string="Quality">
                             <group string="Corrective Action">
