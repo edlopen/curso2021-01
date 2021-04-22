@@ -68,4 +68,100 @@
         </field>
     </record>
 
+    <record id="view_helpdesk_ticket_search" model="ir.ui.view">
+        <field name="name">view.helpdesk.ticket.search</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="arch" type="xml">
+            <search string="Ticket">
+                <!-- filtrar por nombre y por usuario asignado -->
+                <field name="name" />
+                <field name="user_id" />
+                <!-- filtrar tickets asignados -->
+                <filter string="Asigned" name="assigned" domain="[('user_id', '!=', False)]" />
+                <!-- filtrar tickets sin fecha límite -->
+                <filter string="No date limit" name="No date limit" domain="[('date_limit', '=', False)]" />
+                <!-- agrupar por date_due -->
+                <filter string="Date limit" name="Date limit" context="{'group_by': 'date_limit'}" />
+                <!-- agrupar por usuario asignado -->
+                <filter string="User assigned" name="user_id" context="{'group_by': 'user_id'}" />
+            </search>
+        </field>
+    </record>
+
+    <record id="helpdesk_ticket_view_pivot" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.view.pivot</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="arch" type="xml">
+            <pivot string="Ticket" disable_linking="true">
+                <!-- mostrar tiempo dedicado por usuario / mes -->
+                <field name="user_id" type="row"/>
+                <field name="date" interval="month" type="col"/>
+                <field name="dedicated_time" type="measure" widget="float_time"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="helpdesk_ticket_view_graph" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.view.graph</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="arch" type="xml">
+            <graph string="Ticket" type="bar">
+                <!-- mostrar tiempo dedicado por usuario -->
+                <field name="user_id"/>
+                <field name="dedicated_time" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="helpdesk_ticket_view_calendar" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.view.calendar</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="arch" type="xml">
+            <calendar string="Tickets" date_start="date" color="user_id" event_limit="5">
+                <!-- por fecha mostrando cada usuario asignado. -->
+                <field name="name" />
+                <field name="user_id" filters="1"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="helpdesk_ticket_view_kanban" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.view.kanban</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="arch" type="xml">
+            <!--
+                - mostrar en tarjeta usuario y tiempo dedicado
+                - agrupar por usuario
+                - extra: añadir un field color, para cambiar el color de la tarjeta, ver como está hecho en crm.lead
+            -->
+            <kanban default_group_by="user_id">
+                <templates>
+                    <field name="color" invisible="1" />
+                    <t t-name="kanban-box">
+                        <div t-attf-class="#{!selection_mode ? kanban_color(record.color.raw_value) : ''} oe_kanban_global_click">
+                                <div class="o_dropdown_kanban dropdown">
+                                    <a class="dropdown-toggle o-no-caret btn" role="button" data-toggle="dropdown" data-display="static" href="#" aria-label="Dropdown menu" title="Dropdown menu">
+                                        <span class="fa fa-ellipsis-v"/>
+                                    </a>
+                                    <div class="dropdown-menu" role="menu">
+                                        <t t-if="widget.editable"><a role="menuitem" type="edit" class="dropdown-item">Edit</a></t>
+                                        <t t-if="widget.deletable"><a role="menuitem" type="delete" class="dropdown-item">Delete</a></t>
+                                        <ul class="oe_kanban_colorpicker" data-field="color"/>
+                                    </div>
+                                </div>
+                                <div class="oe_kanban_content">
+                                    <div class="o_kanban_record_title">
+                                        <strong><field name="user_id"/></strong>
+                                        <br/>
+                                        <field name="dedicated_time" widget="float_time"/>
+                                    </div>
+                                </div>
+                                <div class="oe_clear"/>
+                            </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
 </odoo>

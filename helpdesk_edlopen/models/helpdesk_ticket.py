@@ -102,6 +102,11 @@ class HelpdeskTicket(models.Model):
 
     tag_name = fields.Char(string='Tag Name')
 
+    color = fields.Integer(
+        string='Color',
+        default=0
+    )
+
     def action_assigned(self):
         self.ensure_one()
         self.write({
