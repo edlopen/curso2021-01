@@ -40,7 +40,18 @@
                             </group>
                         </page>
                         <page name="actions" string="Actions">
-                            <field name="action_ids" />
+                            <field name="action_ids">
+                                <tree name="action_ids">
+                                    <field name="name" />
+                                    <field name="date" />
+                                </tree>
+                                <form>
+                                    <group>
+                                        <field name="name" />
+                                        <field name="date" />
+                                    </group>
+                                </form>
+                            </field>
                         </page>
                         <page name="quality" string="Quality">
                             <group string="Corrective Action">
