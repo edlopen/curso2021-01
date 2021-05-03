@@ -144,6 +144,7 @@ class HelpdeskTicket(models.Model):
 
     def create_tag(self):
         self.ensure_one()
+        #import pdb; pdb.set_trace()
         # opción 1
         self.write({
             'tag_ids': [(0, 0, {'name': self.tag_name})]

@@ -33,10 +33,13 @@
                     <notebook>
                         <page name="description" string="Description">
                             <group>
-                                <field name="description" nolabel="1"/>
+                                <field name="description" nolabel="1" colspan="2"/>
                                 <field name="tag_name" />
                                 <button string="Create tag" name="create_tag" type="object" class="btn-primary" />
-                                <field name="tag_ids" nolabel="1"/>
+                                <field name="tag_ids" 
+                                    nolabel="1"
+                                    context="{'form_view_ref': 'helpdesk_edlopen.helpdesk_ticket_tag_view_form_no_priority'}"
+                                    />
                             </group>
                         </page>
                         <page name="actions" string="Actions">
