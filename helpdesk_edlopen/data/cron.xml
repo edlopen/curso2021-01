@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="helpdesk_ticket_tag_delete_tag_cron" model="ir.cron">
+        <field name="name">Delete unused tags</field>
+        <field name="model_id" ref="model_helpdesk_ticket_tag" />
+        <field name="state">code</field> 
+        <field name="code">model.cron_delete_tag()</field>
+        <field name="user_id" ref="base.user_root" />
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False" />
+    </record>
+</odoo>

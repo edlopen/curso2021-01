@@ -1,4 +1,6 @@
 from odoo import _, api, fields, models
+from datetime import timedelta
+from odoo.exceptions import ValidationError
 
 
 class HelpdeskTicketAction(models.Model):
@@ -25,9 +27,19 @@ class HelpdeskTicketTag(models.Model):
         string='Tickets'
     )
 
+    @api.model 
+    def cron_delete_tag(self):
+        tickets = self.search([('ticket_ids','=',False)])
+        tickets.unlink()
 
 class HelpdeskTicket(models.Model):
     _name = 'helpdesk.ticket'
+
+    def _date_default_today(self):
+        return fields.Date.today()
+
+    def _default_user_id(self):
+        return self.env.uid
 
     name = fields.Char(
         string='Name',
@@ -39,7 +51,8 @@ class HelpdeskTicket(models.Model):
     )
 
     date = fields.Date(
-        string='Date'
+        string='Date',
+        default=_date_default_today
     )
 
     state = fields.Selection([
@@ -78,7 +91,8 @@ class HelpdeskTicket(models.Model):
 
     user_id = fields.Many2one(
         comodel_name='res.users',
-        string='Assigned to'
+        string='Assigned to',
+        default=_default_user_id,
     )
 
     action_ids = fields.One2many(
@@ -144,6 +158,7 @@ class HelpdeskTicket(models.Model):
 
     def create_tag(self):
         self.ensure_one()
+        """
         #import pdb; pdb.set_trace()
         # opción 1
         self.write({
@@ -170,3 +185,24 @@ class HelpdeskTicket(models.Model):
         })
         # finalmente limpiamos el contenido de tag_name
         self.tag_name = False
+        """
+        action = self.env.ref('helpdesk_edlopen.helpdesk_ticket_create_tag_action').read()[0]
+        action['context'] = {
+            'default_name':self.tag_name,
+            'default_ticket_ids':[(6, 0, self.ids)]
+        }
+        return action
+
+    @api.constrains('dedicated_time')
+    def _verify_dedicated_time (self):
+        """dedicated_time debe ser siempre positivo"""
+        for ticket in self:
+            if ticket.dedicated_time < 0:
+                raise ValidationError (_("Dedicated time cannot be negative." ))
+
+    @api.onchange('date')
+    def _onchange_date(self):
+        """date_limit is set as one day more than date field"""
+        for ticket in self.filtered(lambda t: t.date):
+            ticket.date_limit = ticket.date + timedelta(days=1)
+

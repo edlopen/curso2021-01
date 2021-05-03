@@ -8,6 +8,7 @@
     "license": "AGPL-3",
     "depends": [
         "base",
+        "mail",
     ],
     "data": [
         "views/helpdesk_menu.xml",
@@ -15,5 +16,6 @@
         "views/helpdesk_ticket_tag_views.xml",
         "security/helpdesk_security.xml",
         "security/ir.model.access.csv",
+        "data/cron.xml",
     ],
 }
