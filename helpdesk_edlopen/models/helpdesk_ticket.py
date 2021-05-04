@@ -38,6 +38,13 @@ class HelpdeskTicketTag(models.Model):
 
 class HelpdeskTicket(models.Model):
     _name = 'helpdesk.ticket'
+    _description = 'Ticket'
+    _inherit = [
+        'mail.thread.cc',
+        'mail.thread.blacklist',
+        'mail.activity.mixin',
+    ]
+    _primary_email = 'email_from'
 
     def _date_default_today(self):
         return fields.Date.today()
@@ -102,6 +109,11 @@ class HelpdeskTicket(models.Model):
         default=_default_user_id,
     )
 
+    partner_id = fields.Many2one(
+        comodel_name='res.partner',
+        string='Partner',
+    )
+
     action_ids = fields.One2many(
         comodel_name='helpdesk.ticket.action',
         inverse_name='ticket_id',
@@ -127,6 +139,8 @@ class HelpdeskTicket(models.Model):
         string='Color',
         default=0
     )
+
+    email_from = fields.Char()
 
     def action_assigned(self):
         self.ensure_one()
@@ -220,9 +234,9 @@ class HelpdeskTicket(models.Model):
             total_time = sum(record.action_ids.mapped('time'))
 
     def _set_time(self):
-        for record in self.filtered(lambda r: r.time):
+        for record in self.filtered(lambda r: r.dedicated_time):
             time_now = sum(record.action_ids.mapped('time'))
-            next_time = record.time - time_now
+            next_time = record.dedicated_time - time_now
             if next_time:
                 data = {
                     'name': '/',

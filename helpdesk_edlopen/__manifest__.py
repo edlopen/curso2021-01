@@ -11,12 +11,12 @@
         "mail",
     ],
     "data": [
+        "wizards/create_ticket_view.xml",
         "views/helpdesk_menu.xml",
         "views/helpdesk_views.xml",
         "views/helpdesk_ticket_tag_views.xml",
         "security/helpdesk_security.xml",
         "security/ir.model.access.csv",
-        "wizards/create_ticket_view.xml",
         "data/cron.xml",
     ],
 }

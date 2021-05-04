@@ -20,6 +20,13 @@
                     </div>
                     <group>
                         <group>
+                            <field name="partner_id" 
+                                context="{
+                                    'default_company_type': 'person',
+                                    'default_user_id': user_id,
+                                }"
+                            />
+                            <!--context={"default_company_type": 'default_user_id': 'user_id'}-->
                             <field name="date" />
                             <field name="date_limit" />
                         </group>
@@ -27,7 +34,7 @@
                             <field name="user_id" />
                             <field name="assigned" />
                             <field name="ticket_qty" />
-                            <field name="dedicated_time" />
+                            <!--<field name="dedicated_time" />-->
                         </group>
                     </group>
                     <notebook>
@@ -68,6 +75,11 @@
                         </page>
                     </notebook>
                 </sheet>
+                <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids" options="{'post_refresh': 'recipients'}"/>
+                    </div>
             </form>
         </field>
     </record>
@@ -112,7 +124,7 @@
                 <!-- mostrar tiempo dedicado por usuario / mes -->
                 <field name="user_id" type="row"/>
                 <field name="date" interval="month" type="col"/>
-                <field name="dedicated_time" type="measure" widget="float_time"/>
+                <!--<field name="dedicated_time" type="measure" widget="float_time"/>-->
             </pivot>
         </field>
     </record>
@@ -124,7 +136,7 @@
             <graph string="Ticket" type="bar">
                 <!-- mostrar tiempo dedicado por usuario -->
                 <field name="user_id"/>
-                <field name="dedicated_time" type="measure"/>
+                <!--<field name="dedicated_time" type="measure"/>-->
             </graph>
         </field>
     </record>
@@ -169,7 +181,7 @@
                                     <div class="o_kanban_record_title">
                                         <strong><field name="user_id"/></strong>
                                         <br/>
-                                        <field name="dedicated_time" widget="float_time"/>
+                                        <!--<field name="dedicated_time" widget="float_time"/>-->
                                     </div>
                                 </div>
                                 <div class="oe_clear"/>
