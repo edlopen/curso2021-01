@@ -16,6 +16,10 @@ class HelpdeskTicketAction(models.Model):
         string='Ticket'
     )
 
+    time = fields.Float(
+        string='Time'
+    )
+
 
 class HelpdeskTicketTag(models.Model):
     _name = 'helpdesk.ticket.tag'
@@ -67,7 +71,10 @@ class HelpdeskTicket(models.Model):
     )
 
     dedicated_time = fields.Float(
-        string='Dedicated Time'
+        string='Dedicated Time',
+        compute='_get_time',
+        inverse='_set_time',
+        search='_search_time',
     )
 
     assigned = fields.Boolean(
@@ -206,3 +213,25 @@ class HelpdeskTicket(models.Model):
         for ticket in self.filtered(lambda t: t.date):
             ticket.date_limit = ticket.date + timedelta(days=1)
 
+    @api.depends('action_ids.time')
+    def _get_time(self):
+        for record in self:
+            # sumatorio del tiempo de todas las acctiones
+            total_time = sum(record.action_ids.mapped('time'))
+
+    def _set_time(self):
+        for record in self.filtered(lambda r: r.time):
+            time_now = sum(record.action_ids.mapped('time'))
+            next_time = record.time - time_now
+            if next_time:
+                data = {
+                    'name': '/',
+                    'time': next_time,
+                    'date': fields.Date.today(),
+                    'ticket_id': record.id,
+                }
+                self.env['helpdesk.ticket.action'].create(data)
+
+    def _search_time(self, operator, value):
+        actions = self.env['helpdesk.ticket.action'].search([('time', operator, value)])
+        return [('id', 'in', actions.mapped('ticket_id').ids)]

@@ -47,11 +47,13 @@
                                 <tree name="action_ids">
                                     <field name="name" />
                                     <field name="date" />
+                                    <field name="time" />
                                 </tree>
                                 <form>
                                     <group>
                                         <field name="name" />
                                         <field name="date" />
+                                        <field name="time" />
                                     </group>
                                 </form>
                             </field>

@@ -11,6 +11,9 @@
                         <field name="name" />
                     </h1>
                     <group>
+                        <button string="Create Ticket" 
+                            name="%(helpdesk_edlopen.create_ticket_action)d"
+                            type="action"/>
                         <field name="ticket_ids" />
                     </group>
                 </sheet>
